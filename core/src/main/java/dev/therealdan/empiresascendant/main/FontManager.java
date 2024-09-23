@@ -66,6 +66,7 @@ public class FontManager implements Disposable {
 
     private BitmapFont getFont(float fontSize, OrthographicCamera camera) {
         int font = (int) (fontSize * camera.zoom * scale);
+        if (font < 5) font = 5;
         if (!fonts.containsKey(font)) generateFont(font);
         return fonts.get(font);
     }
