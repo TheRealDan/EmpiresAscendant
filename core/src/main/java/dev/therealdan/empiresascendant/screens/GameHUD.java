@@ -42,13 +42,13 @@ public class GameHUD extends BaseScreen {
 
     @Override
     public void render(float delta) {
-        super.render(delta);
-
         if (getToBuild() != null) {
-            Building ghost = new Building(getToBuild(), getMousePosition());
+            Building ghost = new Building(getToBuild(), getGame().getMousePosition());
             ghost.setConstructionProgress(0.999);
             ghost.render(app, null);
         }
+
+        super.render(delta);
 
         float spacing = 10;
         float owidth = resourceWidth, width;
