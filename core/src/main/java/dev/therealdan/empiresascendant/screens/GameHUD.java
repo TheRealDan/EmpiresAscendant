@@ -16,7 +16,6 @@ import dev.therealdan.empiresascendant.game.entities.unit.units.Man;
 import dev.therealdan.empiresascendant.main.EmpiresAscendantApp;
 import dev.therealdan.empiresascendant.main.Keyboard;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +33,7 @@ public class GameHUD extends BaseScreen {
     private float resourceHeight = 0;
     private float entityWidth = 0;
     private float entityHeight = 100;
+    private float entitiesWidth = 0;
 
     public GameHUD(EmpiresAscendantApp app, GameScreen game) {
         super(app);
@@ -87,39 +87,27 @@ public class GameHUD extends BaseScreen {
 
         y = oy;
         interacting = false;
-        switch (getGame().getSelected().size()) {
-            case 0:
-                break;
-            case 1:
-                if (getGame().getSelected().get(0) instanceof Building) {
-                    buildingHUD(Collections.singletonList((Building) getGame().getSelected().get(0)), x, y, entityWidth, entityHeight, spacing);
-                    break;
-                } else if (getGame().getSelected().get(0) instanceof ResourceNode) {
-                    resourceNodeHUD(Collections.singletonList((ResourceNode) getGame().getSelected().get(0)), x, y, entityWidth, entityHeight, spacing);
-                    break;
-                } else if (getGame().getSelected().get(0) instanceof Unit) {
-                    unitHUD(Collections.singletonList((Unit) getGame().getSelected().get(0)), x, y, entityWidth, entityHeight, spacing);
-                    break;
+        if (!getGame().getSelected().isEmpty()) {
+            Entity.Type entityType = Util.getEntityType(getGame().getSelected());
+            if (entityType != null) {
+                switch (entityType) {
+                    case BUILDING:
+                        buildings((List<Building>) (List<?>) getGame().getSelected(), x, y, entityWidth, entityHeight, spacing);
+                        break;
+                    case RESOURCE_NODE:
+                        resourceNodes((List<ResourceNode>) (List<?>) getGame().getSelected(), x, y, entityWidth, entityHeight, spacing);
+                        break;
+                    case UNIT:
+                        units((List<Unit>) (List<?>) getGame().getSelected(), x, y, entityWidth, entityHeight, spacing);
+                        break;
                 }
-            default:
-                if (Util.sameEntityType(getGame().getSelected())) {
-                    Entity entity = getGame().getSelected().get(0);
-                    if (entity instanceof Building) {
-                        List<Building> buildings = (List<Building>) (List<?>) getGame().getSelected();
-                        buildingHUD(buildings, x, y, entityWidth, entityHeight, spacing);
-                    } else if (entity instanceof ResourceNode) {
-                        List<ResourceNode> resourceNodes = (List<ResourceNode>) (List<?>) getGame().getSelected();
-                        resourceNodeHUD(resourceNodes, x, y, entityWidth, entityHeight, spacing);
-                    } else if (entity instanceof Unit) {
-                        List<Unit> units = (List<Unit>) (List<?>) getGame().getSelected();
-                        unitHUD(units, x, y, entityWidth, entityHeight, spacing);
-                    }
-                }
-                break;
+            } else {
+                entities(getGame().getSelected(), x, y, entitiesWidth, entityHeight, spacing);
+            }
         }
     }
 
-    private void buildingHUD(List<Building> buildings, float ox, float oy, float width, float height, float spacing) {
+    private void buildings(List<Building> buildings, float ox, float oy, float width, float height, float spacing) {
         Building building = buildings.get(0);
         if (containsMouse(ox, oy, width, height)) interacting = true;
         app.batch.setColor(Color.CORAL);
@@ -127,13 +115,14 @@ public class GameHUD extends BaseScreen {
         height -= spacing * 2f;
         width = height;
         ox += spacing;
-        oy += spacing;
+        float y = oy + spacing;
+        float ty = y;
         app.batch.setColor(Color.WHITE);
-        app.batch.draw(app.textures.box, ox, oy, width, height);
-        app.batch.draw(building.getTexture(), ox, oy, width, height);
+        app.batch.draw(app.textures.box, ox, y, width, height);
+        app.batch.draw(building.getTexture(), ox, y, width, height);
         float entityWidth = width + spacing * 2f;
         ox += width + spacing;
-        float y = oy + height;
+        y += height;
         String text = building.getType().getName() + (buildings.size() > 1 ? " (" + buildings.size() + ")" : "");
         app.font.draw(app.batch, camera, text, ox, y, 16, Color.WHITE);
         width = app.font.getWidth(app.batch, camera, text, 16);
@@ -166,7 +155,7 @@ public class GameHUD extends BaseScreen {
         this.entityWidth = entityWidth;
         entityWidth = 0;
         ox += width + spacing;
-        y = oy;
+        y = ty;
         height = (height - spacing) / 2f;
         width = height;
         float x = ox;
@@ -183,6 +172,7 @@ public class GameHUD extends BaseScreen {
             }
             x += width + spacing;
         }
+        float tx = x;
         entityWidth = Math.max(entityWidth, x - ox);
         x = ox;
         y += height + spacing;
@@ -199,6 +189,7 @@ public class GameHUD extends BaseScreen {
             }
             x += width + spacing;
         }
+        tx = Math.max(tx, x);
         entityWidth = Math.max(entityWidth, x - ox);
         x = ox;
         y += height + spacing * 2f;
@@ -218,20 +209,22 @@ public class GameHUD extends BaseScreen {
         }
         app.batch.setColor(Color.WHITE);
         this.entityWidth += entityWidth;
+        x += width + spacing * 2f;
+        if (buildings.size() > 1) entities((List<Entity>)(List<?>) buildings, tx, oy, entitiesWidth, entityHeight, spacing);
     }
 
-    private void resourceNodeHUD(List<ResourceNode> resourceNodes, float x, float y, float width, float height, float spacing) {
+    private void resourceNodes(List<ResourceNode> resourceNodes, float x, float oy, float width, float height, float spacing) {
         ResourceNode resourceNode = resourceNodes.get(0);
         long total = 0;
         for (ResourceNode each : resourceNodes)
             total += each.getResources().total();
-        if (containsMouse(x, y, width, height)) interacting = true;
+        if (containsMouse(x, oy, width, height)) interacting = true;
         app.batch.setColor(Color.CORAL);
-        app.batch.draw(app.textures.box, x, y, width, height);
+        app.batch.draw(app.textures.box, x, oy, width, height);
         height -= spacing * 2f;
         width = height;
         x += spacing;
-        y += spacing;
+        float y = oy + spacing;
         app.batch.setColor(Color.WHITE);
         app.batch.draw(app.textures.box, x, y, width, height);
         app.batch.draw(resourceNode.getTexture(), x, y, width, height);
@@ -246,9 +239,11 @@ public class GameHUD extends BaseScreen {
         app.font.draw(app.batch, camera, text, x, y, 10, Color.WHITE);
         width = Math.max(width, app.font.getWidth(app.batch, camera, text, 10));
         this.entityWidth = entityWidth + width + spacing;
+        x += width + spacing * 2f;
+        if (resourceNodes.size() > 1) entities((List<Entity>)(List<?>) resourceNodes, x, oy, entitiesWidth, entityHeight, spacing);
     }
 
-    private void unitHUD(List<Unit> units, float ox, float oy, float width, float oheight, float spacing) {
+    private void units(List<Unit> units, float ox, float oy, float width, float oheight, float spacing) {
         Unit unit = units.get(0);
         if (containsMouse(ox, oy, width, oheight)) interacting = true;
         app.batch.setColor(Color.CORAL);
@@ -257,16 +252,17 @@ public class GameHUD extends BaseScreen {
         float height = oheight;
         width = height;
         float x = ox + spacing;
-        oy += spacing;
+        float y = oy + spacing;
         app.batch.setColor(Color.WHITE);
-        app.batch.draw(app.textures.box, x, oy, width, height);
-        app.batch.draw(unit.getTexture(), x, oy, width, height);
+        app.batch.draw(app.textures.box, x, y, width, height);
+        app.batch.draw(unit.getTexture(), x, y, width, height);
         app.batch.setColor(Color.WHITE);
         x += width + spacing;
-        oy += height;
+        y += height;
         String text = unit.getType().getName() + (units.size() > 1 ? "s (" + units.size() + ")" : "");
-        app.font.draw(app.batch, camera, text, x, oy, 16, Color.WHITE);
-        float y = oy - app.font.getHeight(app.batch, camera, text, 16) - spacing;
+        app.font.draw(app.batch, camera, text, x, y, 16, Color.WHITE);
+        float ty = y;
+        y = y - app.font.getHeight(app.batch, camera, text, 16) - spacing;
         width = app.font.getWidth(app.batch, camera, text, 16) + spacing;
         if (unit.getType().equals(Unit.Type.MAN)) {
             height = (height - spacing * 2f - app.font.getHeight(app.batch, camera, "", 16)) / 2f;
@@ -290,14 +286,14 @@ public class GameHUD extends BaseScreen {
                 second = !second;
                 if (second) {
                     x += width;
-                    y = oy - app.font.getHeight(app.batch, camera, text, 16) - spacing;
+                    y = ty - app.font.getHeight(app.batch, camera, text, 16) - spacing;
                     width = 0;
                 }
             }
             x += width;
             height = (oheight - spacing) / 2f;
             width = height;
-            y = oy - height;
+            y = ty - height;
             second = true;
             this.building = null;
             for (Building.Type building : Building.Type.values()) {
@@ -313,11 +309,45 @@ public class GameHUD extends BaseScreen {
                 second = !second;
                 if (second) {
                     x += width + spacing;
-                    y = oy - height;
+                    y = ty - height;
                 }
             }
         }
         this.entityWidth = x - ox + width + spacing;
+        x += width + spacing * 2f;
+        if (units.size() > 1) entities((List<Entity>)(List<?>) units, x, oy, entitiesWidth, entityHeight, spacing);
+    }
+
+    private void entities(List<Entity> entities, float ox, float oy, float width, float oheight, float spacing) {
+        if (containsMouse(ox, oy, width, oheight)) interacting = true;
+        app.batch.setColor(Color.CORAL);
+        app.batch.draw(app.textures.box, ox, oy, width, oheight);
+        float y = oy + oheight;
+        boolean small = entities.size() > 20;
+        float height = small ? (oheight - spacing * 2f) / 4f : (oheight - spacing * 3f) / 2f;
+        width = height;
+        y -= spacing + height;
+        float x = ox + spacing;
+        int i = 0;
+        for (Entity entity : entities) {
+            i++;
+            app.batch.setColor(Color.WHITE);
+            app.batch.draw(app.textures.box, x, y, width, height);
+            app.batch.draw(entity.getTexture(), x, y, width, height);
+            if (small ? i == 4 : i == 2) {
+                x += small ? width : width + spacing;
+                y = oy + oheight - spacing - height;
+                i = 0;
+            } else {
+                y -= small ? height : spacing + height;
+            }
+        }
+        if (i != 0) {
+            x += width + spacing;
+        } else if (small) {
+            x += spacing;
+        }
+        this.entitiesWidth = x - ox;
     }
 
     public boolean isInteracting() {

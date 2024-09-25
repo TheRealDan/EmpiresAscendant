@@ -38,8 +38,8 @@ public class ResourceNode extends Entity {
     }
 
     @Override
-    public String getEntityType() {
-        return getType().toString();
+    public Entity.Type getEntityType() {
+        return Entity.Type.RESOURCE_NODE;
     }
 
     @Override

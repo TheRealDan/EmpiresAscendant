@@ -45,8 +45,8 @@ public abstract class Entity {
         return getTexture(null).getHeight() / (getTexture(null).getWidth() / getWidth());
     }
 
-    public String getEntityType() {
-        return "";
+    public Type getEntityType() {
+        return null;
     }
 
     public Texture getTexture() {
@@ -59,5 +59,9 @@ public abstract class Entity {
 
     public Vector2 getPosition() {
         return position;
+    }
+
+    public enum Type {
+        BUILDING, RESOURCE_NODE, UNIT
     }
 }

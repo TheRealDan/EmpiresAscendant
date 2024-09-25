@@ -80,8 +80,8 @@ public class Unit extends Entity {
     }
 
     @Override
-    public String getEntityType() {
-        return getType().toString();
+    public Entity.Type getEntityType() {
+        return Entity.Type.UNIT;
     }
 
     @Override

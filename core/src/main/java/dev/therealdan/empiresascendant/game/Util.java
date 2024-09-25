@@ -10,10 +10,10 @@ public abstract class Util {
         return getEntityType(entities) != null;
     }
 
-    public static String getEntityType(List<Entity> entities) {
-        String entityType = "";
+    public static Entity.Type getEntityType(List<Entity> entities) {
+        Entity.Type entityType = null;
         for (Entity entity : entities) {
-            if (entityType.isEmpty()) entityType = entity.getEntityType();
+            if (entityType == null) entityType = entity.getEntityType();
             if (!entity.getEntityType().equals(entityType)) {
                 entityType = null;
                 break;
