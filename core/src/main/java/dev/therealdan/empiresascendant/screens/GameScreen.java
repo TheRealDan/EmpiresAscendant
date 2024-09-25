@@ -59,9 +59,9 @@ public class GameScreen extends BaseScreen {
         Entity hovering = null;
         for (Entity entity : getInstance().getEntities().stream().sorted((o1, o2) -> o1.getPosition().y == o2.getPosition().y ? 0 : o1.getPosition().y < o2.getPosition().y ? 1 : -1).collect(Collectors.toList())) {
             selection.remove(entity);
-            if (startSelection != null && (entity.within(startSelection, getMousePosition()) || entity.equals(getHovering()))) selection.add(entity);
+            if (startSelection != null && (entity.within(startSelection, getMousePosition()))) selection.add(entity);
             if (entity.heightContains(getMousePosition())) hovering = entity;
-            entity.render(app, getSelected().contains(entity) ? Color.WHITE : entity.equals(getHovering()) || getSelection().contains(entity) ? new Color(1, 1, 1, 0.5f) : null);
+            entity.render(app, entity.equals(getHovering()) && startSelection == null ? new Color(1, 1, 1, 0.5f) : getSelected().contains(entity) ? Color.WHITE : getSelection().contains(entity) ? new Color(1, 1, 1, 0.5f) : null);
         }
         this.hovering = hovering;
 
