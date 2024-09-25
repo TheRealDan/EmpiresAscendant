@@ -104,14 +104,14 @@ public class GameScreen extends BaseScreen {
                         if (getSelected().contains(getHovering())) {
                             getSelected().remove(getHovering());
                         } else {
-                            getSelected().add(getHovering());
+                            if (!getSelected().contains(getHovering()))
+                                getSelected().add(getHovering());
                         }
                     } else {
                         if (getSelected().contains(getHovering()) && getSelected().size() == 1) {
                             for (Entity entity : getInstance().getEntities())
-                                if (!entity.equals(getHovering()) && entity.getEntityType().equals(getHovering().getEntityType()))
-                                    if (entity.within(getPosition(0, 0), getPosition(Gdx.graphics.getWidth(), Gdx.graphics.getHeight())))
-                                        getSelected().add(entity);
+                                if (!entity.equals(getHovering()) && entity.getEntityType().equals(getHovering().getEntityType()) && entity.within(getPosition(0, 0), getPosition(Gdx.graphics.getWidth(), Gdx.graphics.getHeight())))
+                                    getSelected().add(entity);
                         } else {
                             getSelected().clear();
                             getSelected().add(getHovering());
@@ -163,7 +163,7 @@ public class GameScreen extends BaseScreen {
             case Input.Buttons.LEFT:
                 if (startSelection != null) {
                     for (Entity entity : getInstance().getEntities())
-                        if (entity.within(startSelection, getMousePosition()))
+                        if (entity.within(startSelection, getMousePosition()) && !getSelected().contains(entity))
                             getSelected().add(entity);
                     startSelection = null;
                 }
