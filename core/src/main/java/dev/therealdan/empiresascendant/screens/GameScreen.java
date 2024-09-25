@@ -71,6 +71,10 @@ public class GameScreen extends BaseScreen {
         }
     }
 
+    public void setHovering(Entity hovering) {
+        this.hovering = hovering;
+    }
+
     public boolean wasdMoveCamera() {
         return getSelected().isEmpty();
     }

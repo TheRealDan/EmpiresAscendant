@@ -16,6 +16,7 @@ import dev.therealdan.empiresascendant.game.entities.unit.units.Man;
 import dev.therealdan.empiresascendant.main.EmpiresAscendantApp;
 import dev.therealdan.empiresascendant.main.Keyboard;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,9 @@ public class GameHUD extends BaseScreen {
 
         float resourceWidth = 0;
         float resourceHeight = 0;
+        interacting = false;
         if (getGame().getInstance().getResources().total() > 0) {
+            if (containsMouse(x, y, owidth, height)) interacting = true;
             app.batch.setColor(Color.CORAL);
             app.batch.draw(app.textures.box, x, y, owidth, height);
             x += spacing;
@@ -86,7 +89,6 @@ public class GameHUD extends BaseScreen {
         this.resourceHeight = resourceHeight;
 
         y = oy;
-        interacting = false;
         if (!getGame().getSelected().isEmpty()) {
             Entity.Type entityType = Util.getEntityType(getGame().getSelected());
             if (entityType != null) {
@@ -210,7 +212,11 @@ public class GameHUD extends BaseScreen {
         app.batch.setColor(Color.WHITE);
         this.entityWidth += entityWidth;
         x += width + spacing * 2f;
-        if (buildings.size() > 1) entities((List<Entity>)(List<?>) buildings, tx, oy, entitiesWidth, entityHeight, spacing);
+        if (buildings.size() > 1) {
+            entities((List<Entity>) (List<?>) buildings, tx, oy, entitiesWidth, entityHeight, spacing);
+        } else if (isInteracting()) {
+            getGame().setHovering(null);
+        }
     }
 
     private void resourceNodes(List<ResourceNode> resourceNodes, float x, float oy, float width, float height, float spacing) {
@@ -240,7 +246,11 @@ public class GameHUD extends BaseScreen {
         width = Math.max(width, app.font.getWidth(app.batch, camera, text, 10));
         this.entityWidth = entityWidth + width + spacing;
         x += width + spacing * 2f;
-        if (resourceNodes.size() > 1) entities((List<Entity>)(List<?>) resourceNodes, x, oy, entitiesWidth, entityHeight, spacing);
+        if (resourceNodes.size() > 1) {
+            entities((List<Entity>) (List<?>) resourceNodes, x, oy, entitiesWidth, entityHeight, spacing);
+        } else if (isInteracting()) {
+            getGame().setHovering(null);
+        }
     }
 
     private void units(List<Unit> units, float ox, float oy, float width, float oheight, float spacing) {
@@ -315,7 +325,11 @@ public class GameHUD extends BaseScreen {
         }
         this.entityWidth = x - ox + width + spacing;
         x += width + spacing * 2f;
-        if (units.size() > 1) entities((List<Entity>)(List<?>) units, x, oy, entitiesWidth, entityHeight, spacing);
+        if (units.size() > 1) {
+            entities((List<Entity>) (List<?>) units, x, oy, entitiesWidth, entityHeight, spacing);
+        } else if (isInteracting()) {
+            getGame().setHovering(null);
+        }
     }
 
     private void entities(List<Entity> entities, float ox, float oy, float width, float oheight, float spacing) {
@@ -328,9 +342,11 @@ public class GameHUD extends BaseScreen {
         width = height;
         y -= spacing + height;
         float x = ox + spacing;
+        Entity hovering = null;
         int i = 0;
         for (Entity entity : entities) {
             i++;
+            if (containsMouse(x, y, width, height)) hovering = entity;
             app.batch.setColor(Color.WHITE);
             app.batch.draw(app.textures.box, x, y, width, height);
             app.batch.draw(entity.getTexture(), x, y, width, height);
@@ -342,6 +358,7 @@ public class GameHUD extends BaseScreen {
                 y -= small ? height : spacing + height;
             }
         }
+        if (isInteracting()) getGame().setHovering(hovering);
         if (i != 0) {
             x += width + spacing;
         } else if (small) {
@@ -395,6 +412,32 @@ public class GameHUD extends BaseScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (isInteracting() && getGame().getHovering() != null) {
+            switch (button) {
+                case Input.Buttons.LEFT:
+                    if (Keyboard.isShiftHeld()) {
+                        for (Entity entity : new ArrayList<>(getGame().getSelected())) {
+                            if (entity.getEntityType().equals(getGame().getHovering().getEntityType())) continue;
+                            getGame().getSelected().remove(entity);
+                        }
+                    } else {
+                        getGame().getSelected().clear();
+                        getGame().getSelected().add(getGame().getHovering());
+                    }
+                    break;
+                case Input.Buttons.RIGHT:
+                    if (Keyboard.isShiftHeld()) {
+                        for (Entity entity : new ArrayList<>(getGame().getSelected())) {
+                            if (!entity.getEntityType().equals(getGame().getHovering().getEntityType())) continue;
+                            getGame().getSelected().remove(entity);
+                        }
+                    } else {
+                        getGame().getSelected().remove(getGame().getHovering());
+                    }
+                    break;
+            }
+        }
+
         switch (button) {
             case Input.Buttons.LEFT:
                 if (getToBuild() != null) {
