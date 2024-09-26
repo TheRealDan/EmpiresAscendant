@@ -211,7 +211,7 @@ public class GameHUD extends BaseScreen {
         }
         app.batch.setColor(Color.WHITE);
         this.entityWidth += entityWidth;
-        x += width + spacing * 2f;
+        tx += spacing;
         if (buildings.size() > 1) {
             entities((List<Entity>) (List<?>) buildings, tx, oy, entitiesWidth, entityHeight, spacing);
         } else if (isInteracting()) {
