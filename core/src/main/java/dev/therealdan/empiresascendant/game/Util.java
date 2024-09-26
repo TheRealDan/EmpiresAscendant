@@ -21,4 +21,20 @@ public abstract class Util {
         }
         return entityType;
     }
+
+    public static boolean sameType(List<Entity> entities) {
+        return getType(entities) != null;
+    }
+
+    public static String getType(List<Entity> entities) {
+        String type = null;
+        for (Entity entity : entities) {
+            if (type == null) type = entity.getTypeString();
+            if (!entity.getTypeString().equals(type)) {
+                type = null;
+                break;
+            }
+        }
+        return type;
+    }
 }

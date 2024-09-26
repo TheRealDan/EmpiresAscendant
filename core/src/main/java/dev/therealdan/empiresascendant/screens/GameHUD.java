@@ -90,9 +90,9 @@ public class GameHUD extends BaseScreen {
 
         y = oy;
         if (!getGame().getSelected().isEmpty()) {
-            Entity.Type entityType = Util.getEntityType(getGame().getSelected());
-            if (entityType != null) {
-                switch (entityType) {
+            String type = Util.getType(getGame().getSelected());
+            if (type != null) {
+                switch (getGame().getSelected().get(0).getEntityType()) {
                     case BUILDING:
                         buildings((List<Building>) (List<?>) getGame().getSelected(), x, y, entityWidth, entityHeight, spacing);
                         break;
@@ -417,7 +417,7 @@ public class GameHUD extends BaseScreen {
                 case Input.Buttons.LEFT:
                     if (Keyboard.isShiftHeld()) {
                         for (Entity entity : new ArrayList<>(getGame().getSelected())) {
-                            if (entity.getEntityType().equals(getGame().getHovering().getEntityType())) continue;
+                            if (entity.getTypeString().equals(getGame().getHovering().getTypeString())) continue;
                             getGame().getSelected().remove(entity);
                         }
                     } else {
@@ -428,7 +428,7 @@ public class GameHUD extends BaseScreen {
                 case Input.Buttons.RIGHT:
                     if (Keyboard.isShiftHeld()) {
                         for (Entity entity : new ArrayList<>(getGame().getSelected())) {
-                            if (!entity.getEntityType().equals(getGame().getHovering().getEntityType())) continue;
+                            if (!entity.getTypeString().equals(getGame().getHovering().getTypeString())) continue;
                             getGame().getSelected().remove(entity);
                         }
                     } else {

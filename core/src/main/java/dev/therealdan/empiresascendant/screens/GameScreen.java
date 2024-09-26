@@ -110,7 +110,7 @@ public class GameScreen extends BaseScreen {
                     } else {
                         if (getSelected().contains(getHovering()) && getSelected().size() == 1) {
                             for (Entity entity : getInstance().getEntities())
-                                if (!entity.equals(getHovering()) && entity.getEntityType().equals(getHovering().getEntityType()) && entity.within(getPosition(0, 0), getPosition(Gdx.graphics.getWidth(), Gdx.graphics.getHeight())))
+                                if (!entity.equals(getHovering()) && entity.getTypeString().equals(getHovering().getTypeString()) && entity.within(getPosition(0, 0), getPosition(Gdx.graphics.getWidth(), Gdx.graphics.getHeight())))
                                     getSelected().add(entity);
                         } else {
                             getSelected().clear();

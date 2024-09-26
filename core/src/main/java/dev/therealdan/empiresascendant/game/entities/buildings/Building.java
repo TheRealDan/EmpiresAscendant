@@ -116,6 +116,11 @@ public class Building extends Entity {
     }
 
     @Override
+    public String getTypeString() {
+        return getType().toString();
+    }
+
+    @Override
     public Entity.Type getEntityType() {
         return Entity.Type.BUILDING;
     }

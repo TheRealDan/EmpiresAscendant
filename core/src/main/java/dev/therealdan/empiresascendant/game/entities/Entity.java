@@ -45,6 +45,10 @@ public abstract class Entity {
         return getTexture(null).getHeight() / (getTexture(null).getWidth() / getWidth());
     }
 
+    public String getTypeString() {
+        return null;
+    }
+
     public Type getEntityType() {
         return null;
     }
