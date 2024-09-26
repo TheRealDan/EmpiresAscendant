@@ -452,15 +452,14 @@ public class GameHUD extends BaseScreen {
                 } else if (getBuilding() != null) {
                     if (getGame().getInstance().getResources().canPurchase(getBuilding(), false))
                         toBuild = getBuilding();
-                } else if (getGame().getSelected().size() == 1 && getGame().getSelected().get(0) instanceof Building) {
-                    Building building = (Building) getGame().getSelected().get(0);
+                } else if (Util.sameType(getGame().getSelected()) && getGame().getSelected().get(0) instanceof Building) {
                     if (getUnit() != null) {
                         for (int i = 0; i < (Keyboard.isShiftHeld() ? 5 : 1); i++)
                             if (getGame().getInstance().getResources().canPurchase(getUnit(), true))
-                                building.getBuildQueue().add(new BuildingAction(getUnit(), false));
+                                Util.shortestQueue((List<Building>) (List<?>) getGame().getSelected()).getBuildQueue().add(new BuildingAction(getUnit(), false));
                     } else if (getResearch() != null) {
                         if (getGame().getInstance().getResources().canPurchase(getResearch(), true))
-                            building.getBuildQueue().add(new BuildingAction(getResearch()));
+                            Util.shortestQueue((List<Building>) (List<?>) getGame().getSelected()).getBuildQueue().add(new BuildingAction(getResearch()));
                     }
                 }
                 break;

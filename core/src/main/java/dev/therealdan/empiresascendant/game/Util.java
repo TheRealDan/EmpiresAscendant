@@ -1,6 +1,7 @@
 package dev.therealdan.empiresascendant.game;
 
 import dev.therealdan.empiresascendant.game.entities.Entity;
+import dev.therealdan.empiresascendant.game.entities.buildings.Building;
 
 import java.util.List;
 
@@ -36,5 +37,18 @@ public abstract class Util {
             }
         }
         return type;
+    }
+
+    public static Building shortestQueue(List<Building> buildings) {
+        Building buildingWithShortestQueue = null;
+        int shortestSize = Integer.MAX_VALUE;
+        for (Building building : buildings) {
+            int size = building.getBuildQueue().size();
+            if (buildingWithShortestQueue == null || size < shortestSize) {
+                shortestSize = size;
+                buildingWithShortestQueue = building;
+            }
+        }
+        return buildingWithShortestQueue;
     }
 }
