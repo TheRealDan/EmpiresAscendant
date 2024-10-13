@@ -75,6 +75,21 @@ public class Building extends Entity {
         app.batch.draw(getTexture(outline), getPosition().x - getWidth() / 2f, getPosition().y - getDepth() / 2f, getWidth(), getHeight());
     }
 
+    public boolean canDeposit(Resources.Resource resource) {
+        switch (getType()) {
+            default:
+                return false;
+            case BIG_ROCK:
+                return true;
+            case MILL:
+                return resource.equals(Resources.Resource.FOOD);
+            case MINING_CAMP:
+                return resource.equals(Resources.Resource.STONE);
+            case LUMBER_CAMP:
+                return resource.equals(Resources.Resource.WOOD);
+        }
+    }
+
     public boolean isUnderConstruction() {
         return getConstructionProgress() < 1.0;
     }
@@ -131,7 +146,8 @@ public class Building extends Entity {
     }
 
     public enum Type {
-        BIG_ROCK;
+        BIG_ROCK,
+        MILL, MINING_CAMP, LUMBER_CAMP;
 
         public List<Unit.Type> getUnits() {
             switch (this) {
@@ -155,6 +171,10 @@ public class Building extends Entity {
             switch (this) {
                 case BIG_ROCK:
                     return 1000;
+                case MINING_CAMP:
+                case LUMBER_CAMP:
+                case MILL:
+                    return resource.equals(Resources.Resource.WOOD) ? 100 : 0;
             }
             return 0;
         }

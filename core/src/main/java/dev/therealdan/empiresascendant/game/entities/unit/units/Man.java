@@ -57,7 +57,7 @@ public class Man extends Unit {
                     Building building = null;
                     float closest = Float.MAX_VALUE;
                     for (Building each : instance.getBuildings()) {
-                        if (!each.getType().equals(Building.Type.BIG_ROCK)) continue;
+                        if (!getResources().canDeposit(each)) continue;
                         float distance = each.getPosition().dst(getPosition());
                         if (distance < closest) {
                             closest = distance;

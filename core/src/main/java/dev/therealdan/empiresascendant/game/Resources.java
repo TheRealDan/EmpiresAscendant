@@ -47,6 +47,13 @@ public class Resources {
             remove(resource, building.getCost(resource));
     }
 
+    public boolean canDeposit(Building building) {
+        for (Map.Entry<Resource, Long> resource : getStock())
+            if (!building.canDeposit(resource.getKey()))
+                return false;
+        return true;
+    }
+
     public boolean canPurchase(Unit.Type unit, boolean purchase) {
         for (Resource resource : Resource.values())
             if (count(resource) < unit.getCost(resource))
