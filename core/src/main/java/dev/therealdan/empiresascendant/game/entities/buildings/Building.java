@@ -147,7 +147,7 @@ public class Building extends Entity {
 
     public enum Type {
         BIG_ROCK,
-        HOUSE, MINING_CAMP, LUMBER_CAMP, MILL;
+        HOUSE, MINING_CAMP, LUMBER_CAMP, MILL, FARM;
 
         public List<Unit.Type> getUnits() {
             switch (this) {
@@ -177,6 +177,8 @@ public class Building extends Entity {
                 case LUMBER_CAMP:
                 case MILL:
                     return resource.equals(Resources.Resource.WOOD) ? 100 : 0;
+                case FARM:
+                    return resource.equals(Resources.Resource.WOOD) ? 60 : 0;
             }
             return 0;
         }

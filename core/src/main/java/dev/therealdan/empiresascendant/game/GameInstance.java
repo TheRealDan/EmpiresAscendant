@@ -25,8 +25,8 @@ public class GameInstance {
     public GameInstance() {
         buildings.add(new Building(Building.Type.BIG_ROCK, new Vector2()));
         getBuildings().get(0).setConstructionProgress(1);
-        getBuildings().get(0).getBuildQueue().add(new BuildingAction(Unit.Type.MAN, false));
-        getBuildings().get(0).build(this);
+            getBuildings().get(0).getBuildQueue().add(new BuildingAction(Unit.Type.MAN, false));
+            getBuildings().get(0).build(this);
 
         for (int i = 0; i < 100; i++) {
             for (ResourceNode.Type type : ResourceNode.Type.values()) {
@@ -39,8 +39,13 @@ public class GameInstance {
     }
 
     public void tick() {
-        for (Building building : buildings)
+        for (Building building : getBuildings()) {
             building.buildQueue(this);
+            if (building.getType().equals(Building.Type.FARM) && !building.isUnderConstruction()) {
+                buildings.remove(building);
+                resourceNodes.add(new ResourceNode(ResourceNode.Type.FARM, building.getPosition(), 0));
+            }
+        }
 
         for (ResourceNode resourceNode : getResourceNodes())
             if (resourceNode.getResources().total() <= 0)

@@ -53,7 +53,7 @@ public class ResourceNode extends Entity {
     }
 
     public enum Type {
-        TREE, ROCK, BERRY_BUSH;
+        TREE, ROCK, BERRY_BUSH, FARM;
 
         public long getResourceCount() {
             switch (this) {
@@ -61,6 +61,8 @@ public class ResourceNode extends Entity {
                     return 1000;
                 case ROCK:
                     return 5000;
+                case FARM:
+                    return 175;
             }
         }
 
@@ -71,6 +73,7 @@ public class ResourceNode extends Entity {
                 case ROCK:
                     return Resources.Resource.STONE;
                 case BERRY_BUSH:
+                case FARM:
                     return Resources.Resource.FOOD;
             }
             return null;
@@ -85,6 +88,8 @@ public class ResourceNode extends Entity {
                     return 3;
                 case BERRY_BUSH:
                     return 6;
+                case FARM:
+                    return 0;
             }
         }
 
@@ -99,7 +104,7 @@ public class ResourceNode extends Entity {
         }
 
         public Texture getTexture(int variation) {
-            String key = toString() + variation;
+            String key = variation == 0 ? toString() : toString() + variation;
             if (!textures.containsKey(key)) textures.put(key, new Texture(key + ".png"));
             return textures.get(key);
         }
