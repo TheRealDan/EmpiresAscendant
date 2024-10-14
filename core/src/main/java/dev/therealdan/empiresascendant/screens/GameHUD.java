@@ -458,8 +458,9 @@ public class GameHUD extends BaseScreen {
                             if (getGame().getInstance().getResources().canPurchase(getUnit(), true))
                                 Util.shortestQueue((List<Building>) (List<?>) getGame().getSelected()).getBuildQueue().add(new BuildingAction(getUnit(), false));
                     } else if (getResearch() != null) {
-                        if (getGame().getInstance().getResources().canPurchase(getResearch(), true))
-                            Util.shortestQueue((List<Building>) (List<?>) getGame().getSelected()).getBuildQueue().add(new BuildingAction(getResearch()));
+                        if (!Util.isResearching(getGame().getInstance(), getResearch()))
+                            if (getGame().getInstance().getResources().canPurchase(getResearch(), true))
+                                Util.shortestQueue((List<Building>) (List<?>) getGame().getSelected()).getBuildQueue().add(new BuildingAction(getResearch()));
                     }
                 }
                 break;

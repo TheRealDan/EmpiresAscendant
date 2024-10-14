@@ -2,10 +2,19 @@ package dev.therealdan.empiresascendant.game;
 
 import dev.therealdan.empiresascendant.game.entities.Entity;
 import dev.therealdan.empiresascendant.game.entities.buildings.Building;
+import dev.therealdan.empiresascendant.game.entities.buildings.BuildingAction;
 
 import java.util.List;
 
 public abstract class Util {
+
+    public static boolean isResearching(GameInstance instance, Research.Type research) {
+        for (Building building : instance.getBuildings())
+            for (BuildingAction action : building.getBuildQueue())
+                if (action.isResearch() && action.getResearch().equals(research))
+                    return true;
+        return false;
+    }
 
     public static boolean sameEntityType(List<Entity> entities) {
         return getEntityType(entities) != null;
