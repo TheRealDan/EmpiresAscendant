@@ -104,7 +104,7 @@ public class ResourceNode extends Entity {
             String key = toString() + variation;
             if (mask != null) key += "M" + Color.rgba8888(mask);
             if (outline != null) key += "O" + Color.rgba8888(outline);
-            if (!textures.containsKey(key)) textures.put(key, Textures.update(getTexture(variation), Color.BLACK, mask, outline)); // TODO - black test, magenta
+            if (!textures.containsKey(key)) textures.put(key, Textures.update(getTexture(variation), Color.MAGENTA, mask, outline));
             return textures.get(key);
         }
 

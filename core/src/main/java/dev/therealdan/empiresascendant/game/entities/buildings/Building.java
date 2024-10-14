@@ -214,7 +214,7 @@ public class Building extends Entity {
             String key = toString();
             if (mask != null) key += "M" + Color.rgba8888(mask);
             if (outline != null) key += "O" + Color.rgba8888(outline);
-            if (!textures.containsKey(key)) textures.put(key, Textures.update(getTexture(), Color.BLACK, mask, outline)); // TODO - black test, magenta
+            if (!textures.containsKey(key)) textures.put(key, Textures.update(getTexture(), Color.MAGENTA, mask, outline));
             return textures.get(key);
         }
 
