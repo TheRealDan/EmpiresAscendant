@@ -53,7 +53,7 @@ public class ResourceNode extends Entity {
     }
 
     public enum Type {
-        TREE, ROCK, BERRY_BUSH, FARM;
+        TREE, ROCK, BERRY_BUSH, GOLD_ROCK, FARM;
 
         public long getResourceCount() {
             switch (this) {
@@ -75,6 +75,8 @@ public class ResourceNode extends Entity {
                 case BERRY_BUSH:
                 case FARM:
                     return Resources.Resource.FOOD;
+                case GOLD_ROCK:
+                    return Resources.Resource.GOLD;
             }
             return null;
         }
@@ -87,6 +89,7 @@ public class ResourceNode extends Entity {
                 case ROCK:
                     return 3;
                 case BERRY_BUSH:
+                case GOLD_ROCK:
                     return 6;
                 case FARM:
                     return 0;

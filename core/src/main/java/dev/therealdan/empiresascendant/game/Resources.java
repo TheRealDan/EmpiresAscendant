@@ -94,7 +94,7 @@ public class Resources {
     }
 
     public enum Resource {
-        WOOD, STONE, FOOD;
+        WOOD, STONE, FOOD, GOLD;
 
         public String getName() {
             return toString().substring(0, 1) + toString().substring(1).toLowerCase();
@@ -110,6 +110,8 @@ public class Resources {
                     return Color.DARK_GRAY;
                 case FOOD:
                     return Color.RED;
+                case GOLD:
+                    return Color.YELLOW;
             }
         }
     }
