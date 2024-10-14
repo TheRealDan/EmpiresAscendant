@@ -4,18 +4,12 @@ import dev.therealdan.empiresascendant.game.entities.Entity;
 import dev.therealdan.empiresascendant.game.entities.buildings.Building;
 import dev.therealdan.empiresascendant.game.entities.buildings.BuildingAction;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 public abstract class Util {
 
     public static boolean hasRequirements(GameInstance instance, Research.Type research) {
-        for (Building building : instance.getBuildings())
-            for (BuildingAction action : building.getBuildQueue())
-                if (action.isResearch() && action.getResearch().equals(research))
-                    return false;
-
         switch (research) {
             default:
                 return true;
@@ -27,6 +21,14 @@ public abstract class Util {
                         buildings.add(building.getType());
                 return buildings.size() >= 2;
         }
+    }
+
+    public static boolean isResearching(GameInstance instance, Research.Type research) {
+        for (Building building : instance.getBuildings())
+            for (BuildingAction action : building.getBuildQueue())
+                if (action.isResearch() && action.getResearch().equals(research))
+                    return true;
+        return false;
     }
 
     public static boolean sameEntityType(List<Entity> entities) {
