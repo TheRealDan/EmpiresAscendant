@@ -84,7 +84,7 @@ public class Building extends Entity {
             case MILL:
                 return resource.equals(Resources.Resource.FOOD);
             case MINING_CAMP:
-                return resource.equals(Resources.Resource.STONE);
+                return resource.equals(Resources.Resource.STONE) || resource.equals(Resources.Resource.GOLD);
             case LUMBER_CAMP:
                 return resource.equals(Resources.Resource.WOOD);
         }
