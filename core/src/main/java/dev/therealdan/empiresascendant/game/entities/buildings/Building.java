@@ -191,7 +191,7 @@ public class Building extends Entity {
         public long getCost(Resources.Resource resource) {
             switch (this) {
                 case BIG_ROCK:
-                    return 1000;
+                    return resource.equals(Resources.Resource.WOOD) ? 275 : resource.equals(Resources.Resource.STONE) ? 100 : 0;
                 case HOUSE:
                     return resource.equals(Resources.Resource.WOOD) ? 25 : 0;
                 case MINING_CAMP:
