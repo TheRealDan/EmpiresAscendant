@@ -17,7 +17,7 @@ public class ResourceNode extends Entity {
     private Resources resources;
 
     public ResourceNode(ResourceNode.Type type, Vector2 position, int variation) {
-        super(position);
+        super(position, 100, Color.WHITE, 0);
         this.type = type;
         this.variation = variation;
         this.resources = new Resources();
@@ -48,8 +48,8 @@ public class ResourceNode extends Entity {
     }
 
     @Override
-    public Texture getTexture(Color outline) {
-        return outline == null ? getType().getTexture(getVariation()) : getType().getTexture(getVariation(), outline);
+    public Texture getTexture(Color mask, Color outline) {
+        return getType().getTexture(getVariation(), mask, outline);
     }
 
     public enum Type {
@@ -100,9 +100,11 @@ public class ResourceNode extends Entity {
             return toString().substring(0, 1) + toString().replace("_", " ").toLowerCase().substring(1);
         }
 
-        public Texture getTexture(int variation, Color outline) {
-            String key = toString() + variation + Color.rgba8888(outline);
-            if (!textures.containsKey(key)) textures.put(key, Textures.applyOutline(getTexture(variation), outline));
+        public Texture getTexture(int variation, Color mask, Color outline) {
+            String key = toString() + variation;
+            if (mask != null) key += "M" + Color.rgba8888(mask);
+            if (outline != null) key += "O" + Color.rgba8888(outline);
+            if (!textures.containsKey(key)) textures.put(key, Textures.update(getTexture(variation), Color.BLACK, mask, outline)); // TODO - black test, magenta
             return textures.get(key);
         }
 

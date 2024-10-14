@@ -1,7 +1,9 @@
 package dev.therealdan.empiresascendant.game.entities.unit.units;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import dev.therealdan.empiresascendant.game.GameInstance;
+import dev.therealdan.empiresascendant.game.Research;
 import dev.therealdan.empiresascendant.game.Resources;
 import dev.therealdan.empiresascendant.game.entities.ResourceNode;
 import dev.therealdan.empiresascendant.game.entities.buildings.Building;
@@ -13,8 +15,8 @@ public class Man extends Unit {
     private Resources resources;
     private long start = 0;
 
-    public Man(Vector2 position) {
-        super(Type.MAN, position);
+    public Man(Vector2 position, Color color, int team, Research research) {
+        super(Type.MAN, position, color, team, research);
         resources = new Resources();
     }
 

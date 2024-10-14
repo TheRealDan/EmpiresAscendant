@@ -23,8 +23,8 @@ public class Unit extends Entity {
 
     private LinkedList<UnitAction> actionQueue = new LinkedList<>();
 
-    public Unit(Unit.Type type, Vector2 position) {
-        super(position);
+    public Unit(Unit.Type type, Vector2 position, Color color, int team, Research research) {
+        super(position, type.getHealth(research), color, team);
         this.type = type;
     }
 
@@ -90,12 +90,23 @@ public class Unit extends Entity {
     }
 
     @Override
-    public Texture getTexture(Color outline) {
-        return outline == null ? getType().getTexture() : getType().getTexture(outline);
+    public Texture getTexture(Color mask, Color outline) {
+        return getType().getTexture(mask, outline);
     }
 
     public enum Type {
         MAN, MILITIA;
+
+        public long getHealth(Research research) {
+            switch (this) {
+                default:
+                    return 1;
+                case MAN:
+                    return 25 + (research.isComplete(Research.Type.LOOM) ? 15 : 0);
+                case MILITIA:
+                    return 40;
+            }
+        }
 
         public long getCost(Resources.Resource resource) {
             switch (this) {
@@ -140,9 +151,11 @@ public class Unit extends Entity {
             return toString().substring(0, 1) + toString().replace("_", " ").toLowerCase().substring(1);
         }
 
-        public Texture getTexture(Color outline) {
-            String key = toString() + Color.rgba8888(outline);
-            if (!textures.containsKey(key)) textures.put(key, Textures.applyOutline(getTexture(), outline));
+        public Texture getTexture(Color mask, Color outline) {
+            String key = toString();
+            if (mask != null) key += "M" + Color.rgba8888(mask);
+            if (outline != null) key += "O" + Color.rgba8888(outline);
+            if (!textures.containsKey(key)) textures.put(key, Textures.update(getTexture(), Color.BLACK, mask, outline)); // TODO - black test, magenta
             return textures.get(key);
         }
 

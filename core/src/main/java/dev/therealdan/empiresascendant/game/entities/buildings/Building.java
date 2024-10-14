@@ -28,8 +28,8 @@ public class Building extends Entity {
     private UnitAction unitAction = null;
     private double constructionProgress = 0;
 
-    public Building(Type type, Vector2 position) {
-        super(position);
+    public Building(Type type, Vector2 position, Color color, int team, Research research) {
+        super(position, type.getHealth(research), color, team);
         this.type = type;
     }
 
@@ -54,7 +54,7 @@ public class Building extends Entity {
         }
 
         if (action.isUnit()) {
-            Unit unit = instance.spawnUnit(action.getUnit(), getPosition().cpy());
+            Unit unit = instance.spawnUnit(action.getUnit(), getPosition().cpy(), getColor(), getTeam());
             unit.queueAction(getUnitAction().copy());
         } else if (action.isResearch()) {
             instance.getResearch().complete(action.getResearch());
@@ -72,7 +72,7 @@ public class Building extends Entity {
     @Override
     public void render(EmpiresAscendantApp app, Color outline) {
         app.batch.setColor(isUnderConstruction() ? new Color(1, 1, 1, 0.5f) : Color.WHITE);
-        app.batch.draw(getTexture(outline), getPosition().x - getWidth() / 2f, getPosition().y - getDepth() / 2f, getWidth(), getHeight());
+        app.batch.draw(getTexture(getColor(), outline), getPosition().x - getWidth() / 2f, getPosition().y - getDepth() / 2f, getWidth(), getHeight());
     }
 
     public boolean canDeposit(Resources.Resource resource) {
@@ -141,8 +141,8 @@ public class Building extends Entity {
     }
 
     @Override
-    public Texture getTexture(Color outline) {
-        return outline == null ? getType().getTexture() : getType().getTexture(outline);
+    public Texture getTexture(Color mask, Color outline) {
+        return getType().getTexture(mask, outline);
     }
 
     public enum Type {
@@ -169,6 +169,25 @@ public class Building extends Entity {
             }
         }
 
+        public long getHealth(Research research) {
+            switch (this) {
+                default:
+                    return 1;
+                case BIG_ROCK:
+                    return 2400;
+                case HOUSE:
+                    return 550;
+                case MINING_CAMP:
+                case LUMBER_CAMP:
+                case MILL:
+                    return 600;
+                case FARM:
+                    return 480;
+                case BARRACKS:
+                    return 1200;
+            }
+        }
+
         public long getCost(Resources.Resource resource) {
             switch (this) {
                 case BIG_ROCK:
@@ -191,9 +210,11 @@ public class Building extends Entity {
             return toString().substring(0, 1) + toString().replace("_", " ").toLowerCase().substring(1);
         }
 
-        public Texture getTexture(Color outline) {
-            String key = toString() + Color.rgba8888(outline);
-            if (!textures.containsKey(key)) textures.put(key, Textures.applyOutline(getTexture(), outline));
+        public Texture getTexture(Color mask, Color outline) {
+            String key = toString();
+            if (mask != null) key += "M" + Color.rgba8888(mask);
+            if (outline != null) key += "O" + Color.rgba8888(outline);
+            if (!textures.containsKey(key)) textures.put(key, Textures.update(getTexture(), Color.BLACK, mask, outline)); // TODO - black test, magenta
             return textures.get(key);
         }
 

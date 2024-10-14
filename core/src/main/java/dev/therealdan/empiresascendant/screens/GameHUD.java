@@ -44,7 +44,7 @@ public class GameHUD extends BaseScreen {
     @Override
     public void render(float delta) {
         if (getToBuild() != null) {
-            Building ghost = new Building(getToBuild(), getGame().getMousePosition());
+            Building ghost = new Building(getToBuild(), getGame().getMousePosition(), getGame().getInstance().getColor(), getGame().getInstance().getTeam(), getGame().getInstance().getResearch());
             ghost.setConstructionProgress(0.999);
             ghost.render(app, null);
         }
@@ -443,7 +443,7 @@ public class GameHUD extends BaseScreen {
             case Input.Buttons.LEFT:
                 if (getToBuild() != null) {
                     if (getGame().getInstance().getResources().canPurchase(getToBuild(), true)) {
-                        Building building = getGame().getInstance().spawnBuilding(getToBuild(), getGame().getMousePosition());
+                        Building building = getGame().getInstance().spawnBuilding(getToBuild(), getGame().getMousePosition(), getGame().getInstance().getColor(), getGame().getInstance().getTeam());
                         for (Entity entity : getGame().getSelected())
                             if (entity instanceof Man)
                                 ((Man) entity).addAction(new UnitAction(building, UnitAction.Type.REPAIR), Keyboard.isShiftHeld());

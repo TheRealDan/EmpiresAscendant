@@ -8,14 +8,32 @@ import dev.therealdan.empiresascendant.main.EmpiresAscendantApp;
 public abstract class Entity {
 
     private Vector2 position;
+    private long health;
+    private Color color;
+    private int team;
 
-    public Entity(Vector2 position) {
+    public Entity(Vector2 position, long health, Color color, int team) {
         this.position = position;
+        this.health = health;
+        this.color = color;
+        this.team = team;
     }
 
     public void render(EmpiresAscendantApp app, Color outline) {
         app.batch.setColor(Color.WHITE);
-        app.batch.draw(getTexture(outline), getPosition().x - getWidth() / 2f, getPosition().y - getDepth() / 2f, getWidth(), getHeight());
+        app.batch.draw(getTexture(getColor(), outline), getPosition().x - getWidth() / 2f, getPosition().y - getDepth() / 2f, getWidth(), getHeight());
+    }
+
+    public void setHealth(long health) {
+        this.health = health;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setTeam(int team) {
+        this.team = team;
     }
 
     public boolean heightContains(Vector2 position) {
@@ -42,7 +60,7 @@ public abstract class Entity {
     }
 
     public float getHeight() {
-        return getTexture(null).getHeight() / (getTexture(null).getWidth() / getWidth());
+        return getTexture().getHeight() / (getTexture().getWidth() / getWidth());
     }
 
     public String getTypeString() {
@@ -54,15 +72,27 @@ public abstract class Entity {
     }
 
     public Texture getTexture() {
-        return getTexture(null);
+        return getTexture(null, null);
     }
 
-    public Texture getTexture(Color outline) {
+    public Texture getTexture(Color mask, Color outline) {
         return null;
     }
 
     public Vector2 getPosition() {
         return position;
+    }
+
+    public long getHealth() {
+        return health;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public int getTeam() {
+        return team;
     }
 
     public enum Type {

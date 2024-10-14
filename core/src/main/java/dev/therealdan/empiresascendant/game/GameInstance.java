@@ -1,5 +1,6 @@
 package dev.therealdan.empiresascendant.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import dev.therealdan.empiresascendant.game.entities.Entity;
 import dev.therealdan.empiresascendant.game.entities.ResourceNode;
@@ -21,9 +22,11 @@ public class GameInstance {
     private HashSet<Unit> units = new HashSet<>();
     private Resources resources = new Resources();
     private Research research = new Research();
+    private Color color = Color.BLUE;
+    private int team = 1;
 
     public GameInstance() {
-        buildings.add(new Building(Building.Type.BIG_ROCK, new Vector2()));
+        buildings.add(new Building(Building.Type.BIG_ROCK, new Vector2(), Color.BLUE, 1, getResearch()));
         getBuildings().get(0).setConstructionProgress(1);
             getBuildings().get(0).getBuildQueue().add(new BuildingAction(Unit.Type.MAN, false));
             getBuildings().get(0).build(this);
@@ -55,25 +58,25 @@ public class GameInstance {
             unit.action(this);
     }
 
-    public Unit spawnUnit(Unit.Type type, Vector2 position) {
+    public Unit spawnUnit(Unit.Type type, Vector2 position, Color color, int team) {
         Unit unit;
         switch (type) {
             default:
-                unit = new Unit(type, position);
+                unit = new Unit(type, position, color, team, getResearch());
                 break;
             case MAN:
-                unit = new Man(position);
+                unit = new Man(position, color, team, getResearch());
                 break;
         }
         units.add(unit);
         return unit;
     }
 
-    public Building spawnBuilding(Building.Type type, Vector2 position) {
+    public Building spawnBuilding(Building.Type type, Vector2 position, Color color, int team) {
         Building building;
         switch (type) {
             default:
-                building = new Building(type, position);
+                building = new Building(type, position, color, team, getResearch());
                 break;
         }
         buildings.add(building);
@@ -102,5 +105,13 @@ public class GameInstance {
 
     public Research getResearch() {
         return research;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public int getTeam() {
+        return team;
     }
 }
