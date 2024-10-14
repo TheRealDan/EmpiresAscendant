@@ -28,7 +28,7 @@ public class BuildingAction {
     }
 
     public long getBuildTime() {
-        return isResearch() ? 10000 : 3000;
+        return isResearch() ? getResearch().getTime() : 3000;
     }
 
     public Texture getTexture() {

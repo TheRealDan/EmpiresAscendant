@@ -123,8 +123,6 @@ public class Unit extends Entity {
             switch (this) {
                 default:
                     return new ArrayList<>();
-                case SPEARMAN:
-                    return List.of(new Research.Type[]{Research.Type.SPEARMAN});
             }
         }
 

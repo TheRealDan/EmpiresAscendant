@@ -163,7 +163,7 @@ public class Building extends Entity {
                 default:
                     return new ArrayList<>();
                 case BIG_ROCK:
-                    return List.of(new Research.Type[]{Research.Type.SPEARMAN, Research.Type.MEDIEVAL_AGE});
+                    return List.of(new Research.Type[]{Research.Type.FEUDAL_AGE});
             }
         }
 
