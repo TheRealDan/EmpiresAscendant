@@ -147,14 +147,16 @@ public class Building extends Entity {
 
     public enum Type {
         BIG_ROCK,
-        HOUSE, MINING_CAMP, LUMBER_CAMP, MILL, FARM;
+        HOUSE, MINING_CAMP, LUMBER_CAMP, MILL, FARM, BARRACKS;
 
         public List<Unit.Type> getUnits() {
             switch (this) {
                 default:
                     return new ArrayList<>();
                 case BIG_ROCK:
-                    return List.of(new Unit.Type[]{Unit.Type.MAN, Unit.Type.SPEARMAN});
+                    return List.of(Unit.Type.MAN);
+                case BARRACKS:
+                    return List.of(Unit.Type.MILITIA);
             }
         }
 
@@ -179,6 +181,8 @@ public class Building extends Entity {
                     return resource.equals(Resources.Resource.WOOD) ? 100 : 0;
                 case FARM:
                     return resource.equals(Resources.Resource.WOOD) ? 60 : 0;
+                case BARRACKS:
+                    return resource.equals(Resources.Resource.WOOD) ? 175 : 0;
             }
             return 0;
         }

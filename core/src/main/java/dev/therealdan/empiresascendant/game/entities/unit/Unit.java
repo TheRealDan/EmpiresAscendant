@@ -95,8 +95,7 @@ public class Unit extends Entity {
     }
 
     public enum Type {
-        MAN, SPEARMAN,
-        KNIGHT, SPEARMAN_KNIGHT;
+        MAN, MILITIA;
 
         public long getCost(Resources.Resource resource) {
             switch (this) {
@@ -107,13 +106,14 @@ public class Unit extends Entity {
                         case FOOD:
                             return 50;
                     }
-                case SPEARMAN:
+                case MILITIA:
                     switch (resource) {
                         default:
                             return 0;
-                        case WOOD:
                         case FOOD:
                             return 60;
+                        case GOLD:
+                            return 20;
                     }
             }
             return 0;
