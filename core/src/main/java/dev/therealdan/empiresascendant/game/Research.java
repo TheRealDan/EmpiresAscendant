@@ -1,6 +1,7 @@
 package dev.therealdan.empiresascendant.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import dev.therealdan.empiresascendant.game.entities.buildings.Building;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,20 @@ public class Research {
 
     public void complete(Type research) {
         completed.add(research);
+    }
+
+    public boolean hasRequirements(GameInstance instance, Type research) {
+        switch (research) {
+            default:
+                return true;
+            case FEUDAL_AGE:
+                List<Building.Type> requiredBuildings = List.of(Building.Type.BARRACKS, Building.Type.MILL, Building.Type.LUMBER_CAMP, Building.Type.MINING_CAMP);
+                HashSet<Building.Type> buildings = new HashSet<>();
+                for (Building building : instance.getBuildings())
+                    if (!building.isUnderConstruction() && requiredBuildings.contains(building.getType()))
+                        buildings.add(building.getType());
+                return buildings.size() >= 2;
+        }
     }
 
     public boolean isComplete(Type... research) {

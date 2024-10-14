@@ -4,24 +4,9 @@ import dev.therealdan.empiresascendant.game.entities.Entity;
 import dev.therealdan.empiresascendant.game.entities.buildings.Building;
 import dev.therealdan.empiresascendant.game.entities.buildings.BuildingAction;
 
-import java.util.HashSet;
 import java.util.List;
 
 public abstract class Util {
-
-    public static boolean hasRequirements(GameInstance instance, Research.Type research) {
-        switch (research) {
-            default:
-                return true;
-            case FEUDAL_AGE:
-                List<Building.Type> requiredBuildings = List.of(Building.Type.BARRACKS, Building.Type.MILL, Building.Type.LUMBER_CAMP, Building.Type.MINING_CAMP);
-                HashSet<Building.Type> buildings = new HashSet<>();
-                for (Building building : instance.getBuildings())
-                    if (!building.isUnderConstruction() && requiredBuildings.contains(building.getType()))
-                        buildings.add(building.getType());
-                return buildings.size() >= 2;
-        }
-    }
 
     public static boolean isResearching(GameInstance instance, Research.Type research) {
         for (Building building : instance.getBuildings())
