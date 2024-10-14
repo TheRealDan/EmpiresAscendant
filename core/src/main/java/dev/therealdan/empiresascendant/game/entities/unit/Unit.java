@@ -119,6 +119,16 @@ public class Unit extends Entity {
             return 0;
         }
 
+        public long getTime() {
+            switch (this) {
+                default:
+                    return 0;
+                case MAN:
+                case MILITIA:
+                    return 2 * 1000;
+            }
+        }
+
         public List<Research.Type> getRequirements() {
             switch (this) {
                 default:
