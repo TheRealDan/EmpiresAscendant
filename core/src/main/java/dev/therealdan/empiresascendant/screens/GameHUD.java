@@ -164,7 +164,7 @@ public class GameHUD extends BaseScreen {
         this.research = null;
         for (Research.Type research : building.getType().getResearch()) {
             if (getGame().getInstance().getResearch().isComplete(research)) continue;
-            if (Util.isResearching(getGame().getInstance(), research)) continue;
+            if (getGame().getInstance().getResearch().isResearching(getGame().getInstance(), research)) continue;
             if (containsMouse(x, y, width, height)) this.research = research;
             app.batch.setColor(Color.WHITE);
             app.batch.draw(app.textures.box, x, y, width, height);
@@ -459,7 +459,7 @@ public class GameHUD extends BaseScreen {
                             if (getGame().getInstance().getResources().canPurchase(getUnit(), true))
                                 Util.shortestQueue((List<Building>) (List<?>) getGame().getSelected()).getBuildQueue().add(new BuildingAction(getUnit(), false));
                     } else if (getResearch() != null) {
-                        if (!Util.isResearching(getGame().getInstance(), getResearch()) && getGame().getInstance().getResearch().hasRequirements(getGame().getInstance(), getResearch()))
+                        if (!getGame().getInstance().getResearch().isResearching(getGame().getInstance(), getResearch()) && getGame().getInstance().getResearch().hasRequirements(getGame().getInstance(), getResearch()))
                             if (getGame().getInstance().getResources().canPurchase(getResearch(), true))
                                 Util.shortestQueue((List<Building>) (List<?>) getGame().getSelected()).getBuildQueue().add(new BuildingAction(getResearch()));
                     }

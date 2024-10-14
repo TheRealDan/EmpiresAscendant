@@ -2,6 +2,7 @@ package dev.therealdan.empiresascendant.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import dev.therealdan.empiresascendant.game.entities.buildings.Building;
+import dev.therealdan.empiresascendant.game.entities.buildings.BuildingAction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,14 @@ public class Research {
                         buildings.add(building.getType());
                 return buildings.size() >= 2;
         }
+    }
+
+    public boolean isResearching(GameInstance instance, Type research) {
+        for (Building building : instance.getBuildings())
+            for (BuildingAction action : building.getBuildQueue())
+                if (action.isResearch() && action.getResearch().equals(research))
+                    return true;
+        return false;
     }
 
     public boolean isComplete(Type... research) {
