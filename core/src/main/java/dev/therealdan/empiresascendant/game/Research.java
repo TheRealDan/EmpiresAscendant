@@ -1,7 +1,6 @@
 package dev.therealdan.empiresascendant.game;
 
 import com.badlogic.gdx.graphics.Texture;
-import dev.therealdan.empiresascendant.game.entities.buildings.Building;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +32,13 @@ public class Research {
     }
 
     public enum Type {
+        LOOM,
         FEUDAL_AGE;
 
         public long getCost(Resources.Resource resource) {
             switch (this) {
+                case LOOM:
+                    return resource.equals(Resources.Resource.GOLD) ? 50 : 0;
                 case FEUDAL_AGE:
                     return resource.equals(Resources.Resource.FOOD) ? 500 : 0;
             }
@@ -47,6 +49,8 @@ public class Research {
             switch (this) {
                 default:
                     return 0;
+                case LOOM:
+                    return 25 * 1000;
                 case FEUDAL_AGE:
                     return 130 * 1000;
             }
