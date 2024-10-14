@@ -448,7 +448,7 @@ public class GameHUD extends BaseScreen {
                             if (entity instanceof Man)
                                 ((Man) entity).addAction(new UnitAction(building, UnitAction.Type.REPAIR), Keyboard.isShiftHeld());
                     }
-                    toBuild = null;
+                    if (!Keyboard.isShiftHeld()) toBuild = null;
                     return true;
                 } else if (getBuilding() != null) {
                     if (getGame().getInstance().getResources().canPurchase(getBuilding(), false))
