@@ -121,7 +121,7 @@ public class GameHUD extends BaseScreen {
         float ty = y;
         app.batch.setColor(Color.WHITE);
         app.batch.draw(app.textures.box, ox, y, width, height);
-        app.batch.draw(building.getTexture(), ox, y, width, height);
+        app.batch.draw(building.getTexture(building.getColor(), null), ox, y, width, height);
         float entityWidth = width + spacing * 2f;
         ox += width + spacing;
         y += height;
@@ -266,7 +266,7 @@ public class GameHUD extends BaseScreen {
         float y = oy + spacing;
         app.batch.setColor(Color.WHITE);
         app.batch.draw(app.textures.box, x, y, width, height);
-        app.batch.draw(unit.getTexture(), x, y, width, height);
+        app.batch.draw(unit.getTexture(unit.getColor(), null), x, y, width, height);
         app.batch.setColor(Color.WHITE);
         x += width + spacing;
         y += height;
