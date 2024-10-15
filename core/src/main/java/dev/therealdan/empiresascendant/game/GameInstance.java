@@ -33,6 +33,7 @@ public class GameInstance {
 
         for (int i = 0; i < 100; i++) {
             for (ResourceNode.Type type : ResourceNode.Type.values()) {
+                if (type.equals(ResourceNode.Type.FARM)) continue;
                 resourceNodes.add(new ResourceNode(type, new Vector2(
                     random.nextInt(2500) * (random.nextBoolean() ? 1 : -1),
                     random.nextInt(2500) * (random.nextBoolean() ? 1 : -1)
