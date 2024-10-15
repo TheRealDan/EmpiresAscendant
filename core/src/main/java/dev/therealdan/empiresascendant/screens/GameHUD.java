@@ -311,7 +311,7 @@ public class GameHUD extends BaseScreen {
                 if (containsMouse(x, y, width, height)) this.building = building;
                 app.batch.setColor(Color.WHITE);
                 app.batch.draw(app.textures.box, x, y, width, height);
-                app.batch.draw(building.getTexture(), x, y, width, height);
+                app.batch.draw(building.getTexture(men.stream().findFirst().get().getColor(), null), x, y, width, height);
                 if (!getGame().getInstance().getResources().canPurchase(building, false)) {
                     app.batch.setColor(new Color(0, 0, 0, 0.5f));
                     app.batch.draw(app.textures.box, x, y, width, height);
