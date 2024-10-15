@@ -138,7 +138,7 @@ public class GameHUD extends BaseScreen {
         if (buildings.stream().anyMatch(b -> !b.getBuildQueue().isEmpty())) {
             for (Building each : buildings) {
                 if (each.getBuildQueue().isEmpty()) continue;
-                BuildingAction action = each.getBuildQueue().get(0);
+                BuildingAction action = each.getCurrentAction();
                 text = action.isResearch() ? "Researching " + action.getResearch().getName() : "Creating " + action.getUnit().getName();
                 actions.put(text, actions.getOrDefault(text, 0) + 1);
             }
@@ -205,9 +205,13 @@ public class GameHUD extends BaseScreen {
             app.batch.setColor(action.isForever() ? Color.GOLD : Color.WHITE);
             app.batch.draw(app.textures.box, x, y, width, height);
             app.batch.draw(action.getTexture(), x, y, width, height);
-            app.batch.setColor(new Color(0, 0, 0, 0.5f));
-            if (building.getBuildQueue().getFirst().equals(action))
+            if (action.isUnitComplete()) {
+                app.batch.setColor(new Color(0.5f, 0, 0, 0.5f));
+                app.batch.draw(app.textures.box, x, y, width, height);
+            } else if (building.getCurrentAction().equals(action)) {
+                app.batch.setColor(new Color(0, 0, 0, 0.5f));
                 app.batch.draw(app.textures.box, x, y, width, Math.max(0, Math.min(height, height - (height * ((float) (System.currentTimeMillis() - building.getStart()) / action.getBuildTime())))));
+            }
             x += width + spacing;
         }
         app.batch.setColor(Color.WHITE);

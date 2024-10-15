@@ -97,6 +97,10 @@ public class Unit extends Entity {
     public enum Type {
         MAN, MILITIA;
 
+        public int getPop() {
+            return 1;
+        }
+
         public long getHealth(Research research) {
             switch (this) {
                 default:

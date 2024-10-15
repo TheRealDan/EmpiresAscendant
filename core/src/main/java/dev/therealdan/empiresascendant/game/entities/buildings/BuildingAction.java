@@ -9,6 +9,7 @@ public class BuildingAction {
     private Unit.Type unit;
     private Research.Type research;
     private boolean forever = false;
+    private boolean unitComplete = false;
 
     public BuildingAction(Unit.Type unit, boolean forever) {
         this.unit = unit;
@@ -17,6 +18,10 @@ public class BuildingAction {
 
     public BuildingAction(Research.Type research) {
         this.research = research;
+    }
+
+    public void setUnitComplete(boolean unitComplete) {
+        this.unitComplete = unitComplete;
     }
 
     public boolean isUnit() {
@@ -47,5 +52,9 @@ public class BuildingAction {
 
     public boolean isForever() {
         return forever;
+    }
+
+    public boolean isUnitComplete() {
+        return unitComplete;
     }
 }

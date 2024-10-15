@@ -36,9 +36,11 @@ public class Building extends Entity {
     public void buildQueue(GameInstance instance) {
         if (getBuildQueue().isEmpty()) return;
 
-        if (start == 0) {
+        if (getCurrentAction().isUnitComplete()) {
+            build(instance);
+        } else if (start == 0) {
             start = System.currentTimeMillis();
-        } else if (System.currentTimeMillis() - start > getBuildQueue().get(0).getBuildTime()) {
+        } else if (System.currentTimeMillis() - start > getCurrentAction().getBuildTime()) {
             build(instance);
             start = 0;
         }
@@ -46,7 +48,13 @@ public class Building extends Entity {
 
     public void build(GameInstance instance) {
         if (getBuildQueue().isEmpty()) return;
-        BuildingAction action = getBuildQueue().get(0);
+        BuildingAction action = getCurrentAction();
+
+        if (action.isUnit() && instance.getPopulation(getColor()) + action.getUnit().getPop() > instance.getMaxPopulation(getColor())) {
+            action.setUnitComplete(true);
+            return;
+        }
+
         getBuildQueue().remove(action);
         if (action.isForever()) {
             getBuildQueue().addLast(action);
@@ -92,6 +100,18 @@ public class Building extends Entity {
 
     public boolean isUnderConstruction() {
         return getConstructionProgress() < 1.0;
+    }
+
+    public BuildingAction getCurrentAction() {
+        if (getBuildQueue().isEmpty()) return null;
+        BuildingAction action = getBuildQueue().get(0);
+        if (!action.isUnitComplete()) return action;
+
+        for (BuildingAction buildingAction : getBuildQueue()) {
+            if (buildingAction.equals(action)) continue;
+            if (buildingAction.isResearch()) return buildingAction;
+        }
+        return action;
     }
 
     public Type getType() {

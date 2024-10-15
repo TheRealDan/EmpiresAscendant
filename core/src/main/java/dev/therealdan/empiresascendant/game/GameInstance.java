@@ -58,6 +58,24 @@ public class GameInstance {
             unit.action(this);
     }
 
+    public int getPopulation(Color color) {
+        int pop = 0;
+        for (Unit unit : units)
+            if (unit.getColor().equals(color))
+                pop += unit.getType().getPop();
+        return pop;
+    }
+
+    public int getMaxPopulation(Color color) {
+        int pop = 0;
+        for (Building building : buildings)
+            if (building.getColor().equals(color))
+                if (List.of(Building.Type.BIG_ROCK, Building.Type.HOUSE).contains(building.getType()))
+                    if (!building.isUnderConstruction())
+                        pop += 5;
+        return pop;
+    }
+
     public Unit spawnUnit(Unit.Type type, Vector2 position, Color color, int team) {
         Unit unit;
         switch (type) {
